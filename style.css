@@ -1,0 +1,45 @@
+.sidebar {
+  background: #f9f9f9;
+  position: fixed;
+  top: 51px;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #eee;
+}
+
+.main {
+    /* padding-left: 40px; */
+}
+
+.card {
+  /* background: #fefefe; */
+  border-bottom: 1px solid #e1e8ed;
+  min-height: 150px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  /* margin-top: 20px; */
+  /* margin-bottom: 20px; */
+  
+  /* border-top: 1px solid lightgray; */
+}
+
+.screen-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.tweet-text {
+  padding-top: 8px;
+  font-size: 16px;
+}
+
+.handle {
+  color: #717171;
+  font-weight: bolder;
+}
+
