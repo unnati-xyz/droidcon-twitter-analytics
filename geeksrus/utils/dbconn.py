@@ -64,6 +64,20 @@ def find_and_sort_desc(db_conn, collection, field, no_id = True):
 
     return df
 
+def find_with_project_and_sort(db_conn, collection,  field,query={}, no_id = True):
+    # Make a query to the specific DB and Collection
+    cursor = db_conn[collection].find(projection=query).sort(field, -1)
+
+    # Expand the cursor and construct the DataFrame
+    df = pd.DataFrame(list(cursor))
+
+
+    # Delete the _id
+    if no_id:
+        del df['_id']
+
+    return df
+
 
 
 
