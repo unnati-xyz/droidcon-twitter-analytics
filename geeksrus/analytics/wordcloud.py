@@ -19,9 +19,10 @@ stop.extend(('.', ',', '"', "'", '?', '!', ':', ';',
 
 class WordCloud:
 
-    def getTokenFrequency(self, count_cutoff=10, min_length=3):
+    def getTokenFrequency(self, count_cutoff=2, min_length=3):
         try:
             data_df = read_mongo(dbcon, cfg['collection'])
+            print(data_df.head())
             frequency_words_wo_stop = {}
             for data in data_df['text']:
                 tokens = nltk.wordpunct_tokenize(data)
@@ -34,7 +35,6 @@ class WordCloud:
                             frequency_words_wo_stop[token] = count
                         else:
                             frequency_words_wo_stop[token] = 1
-
             wordcloud= []
             for key, value in frequency_words_wo_stop.items():
                 word_freq = {}
@@ -42,6 +42,8 @@ class WordCloud:
                     word_freq['text'] = key
                     word_freq['size'] = value
                     wordcloud.append(word_freq)
+
+            print(wordcloud)
 
 
             # {'text': 'word', 'size' : count}
@@ -69,8 +71,8 @@ class WordCloud:
 
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
-                screen_count["name"] = row[1]['screen_name']
-                screen_count["count"] = int(row[1]['id'])
+                screen_count["text"] = row[1]['screen_name']
+                screen_count["size"] = int(row[1]['id'])
                 count_data.append(screen_count)
 
             mongo_doc = {}
@@ -98,8 +100,8 @@ class WordCloud:
 
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
-                screen_count["name"] = row[1]['screen_name']
-                screen_count["count"] = int(row[1]['id'])
+                screen_count["text"] = row[1]['screen_name']
+                screen_count["size"] = int(row[1]['id'])
                 count_data.append(screen_count)
 
             mongo_doc = {}
@@ -128,7 +130,7 @@ class WordCloud:
 
 if __name__ == "__main__":
     wc = WordCloud()
-    #wc.getTokenFrequency()
-    #wc.getMentionsFrequency()
-    #wc.getMaximumUserCount()
+    wc.getTokenFrequency()
+    wc.getMentionsFrequency()
+    wc.getMaximumUserCount()
     wc.get_current_wordcloud('word_cloud')
