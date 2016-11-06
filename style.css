@@ -43,3 +43,8 @@
   font-weight: bolder;
 }
 
+.u-carousel-holder {
+  height: 550px;
+  background: gray;
+  padding-top: 20px;
+}
