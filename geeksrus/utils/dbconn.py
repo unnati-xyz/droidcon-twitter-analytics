@@ -39,7 +39,6 @@ def read_mongo_projection(db_conn, collection, query={}, no_id=True):
     df = pd.DataFrame(list(cursor))
 
 
-
     # Delete the _id
     if no_id:
         del df['_id']
@@ -49,6 +48,22 @@ def read_mongo_projection(db_conn, collection, query={}, no_id=True):
 def write_mongo(db_conn, collection, document):
 
     result = db_conn[collection].insert(document)
+
+
+def find_and_sort_desc(db_conn, collection, field, no_id = True):
+    # Make a query to the specific DB and Collection
+    cursor = db_conn[collection].find().sort(field, -1)
+
+    # Expand the cursor and construct the DataFrame
+    df = pd.DataFrame(list(cursor))
+
+
+    # Delete the _id
+    if no_id:
+        del df['_id']
+
+    return df
+
 
 
 
