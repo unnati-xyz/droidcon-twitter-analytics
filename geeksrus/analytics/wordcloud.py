@@ -1,6 +1,6 @@
 import pandas as pd
 from geeksrus import LOGGER
-from geeksrus.utils.dbconn import read_mongo, write_mongo, read_mongo_projection
+from geeksrus.utils.dbconn import read_mongo, write_mongo, read_mongo_projection, find_and_sort_desc
 from geeksrus import dbcon
 from geeksrus import cfg
 
@@ -115,9 +115,20 @@ class WordCloud:
         user_dict = dict(row['user'])
         return pd.Series({'screen_name': user_dict['screen_name'], 'id': user_dict['id']})
 
+    def get_current_wordcloud(self, collection):
+        try:
+            data = find_and_sort_desc(db_conn=dbcon, collection=collection, field='timestamp')
+            wordcloud = data.ix[(0,1)]
+            return wordcloud
+        except:
+            LOGGER.error(traceback.format_exc())
+
+
+
 
 if __name__ == "__main__":
     wc = WordCloud()
-    wc.getTokenFrequency()
-    wc.getMentionsFrequency()
-    wc.getMaximumUserCount()
+    #wc.getTokenFrequency()
+    #wc.getMentionsFrequency()
+    #wc.getMaximumUserCount()
+    wc.get_current_wordcloud('word_cloud')
