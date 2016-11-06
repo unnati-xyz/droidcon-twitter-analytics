@@ -1,9 +1,12 @@
 
 $(function() {
     console.log( "ready!" );
+          $('.carousel').carousel({
+        interval: 2000
+      });
 
     var color = d3.scale.category10();
-  function tokenFreqSuccess(data, domPlaceHolder, type) {
+    function tokenFreqSuccess(data, domPlaceHolder, type) {
       $("#word-cloud").html("");
       d3.layout.cloud().size([1200, 600])
               .words(data)
