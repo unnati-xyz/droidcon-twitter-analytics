@@ -21,20 +21,20 @@ $(function() {
       function draw(words) {
           d3.select(domPlaceHolder).append("svg")
                   .attr("width", "100%")
-                  .attr("height", 400)
+                  .attr("height", 800)
                   .attr("class", "wordcloud")
                   .append("g")
                   // without the transform, words words would get cutoff to the left and top, they would
                   // appear outside of the SVG area
-                  .attr("transform", "translate(335,225)")
+                  .attr("transform", "translate(435,325)")
                   .attr("text-anchor", "middle")
                   .selectAll("text")
                   .data(words)
                   .enter().append("text")
-                  .style("font-size", function(d) { return d.size / 2 + "px"; })
+                  .style("font-size", function(d) { return d.size / 1.5+ "px"; })
                   .style("fill", function(d, i) { return color(i); })
                   .attr("transform", function(d) {
-                      return "translate(" + [d.x / 1.75, d.y / 1.75 ] + ")rotate(" + d.rotate + ")";
+                      return "translate(" + [d.x / 1.2, d.y / 1.2 ] + ")rotate(" + d.rotate + ")";
                   })
                   .text(function(d) { return d.text; });
       }
