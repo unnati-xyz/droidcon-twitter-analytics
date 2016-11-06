@@ -17,7 +17,7 @@
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -135,12 +135,20 @@
             <div class="carousel-inner u-carousel-holder" role="listbox">
               <div id="top-mentions" class="item active">
                 <div id="word-cloud-topics"></div>
-                <div class="carousel-caption">Top Mentions</div>
+                <div class="carousel-caption">
+                  Top topics
+                </div>
               </div>
               <div class="item">
-                <h1>Second Slide</h1>
+                <div id="word-cloud-mentions"></div>
                 <div class="carousel-caption">
-                  LAAAAAAWL
+                  Top Mentions
+                </div>
+              </div>
+              <div class="item">
+                <div id="word-cloud-users"></div>
+                <div class="carousel-caption">
+                  Top Users
                 </div>
               </div>
             </div>
@@ -172,8 +180,8 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script src="d3.layout.cloud.js"></script>
-    <script src="index.js"></script>
+    <script src="/static/js/d3.layout.cloud.js"></script>
+    <script src="/static/js/index.js"></script>
     <script>
       $('.carousel').carousel({
         interval: 5000
