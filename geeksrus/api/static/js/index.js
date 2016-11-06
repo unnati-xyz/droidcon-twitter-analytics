@@ -38,6 +38,31 @@ $(function() {
                   })
                   .text(function(d) { return d.text; });
       }
+
+  }
+
+  function renderTweetStream(data) {
+    var htmlString = "";
+    var height = $("#tweets-list").height();
+
+    var template = '<div class="row"> \
+      <div class="col-md-10 col-md-offset-1 card"> \
+        <div class="row"> \
+          <span class="screen-name">{{name}}</span> \
+          <span class="handle">@{{screen_name}}</span> \
+        </div> \
+        <div class="row tweet-text">{{text}}}</div> \
+      </div> \
+    </div>';
+
+    for(var i=0; i<data.length; i++) {
+        var output = Mustache.render(template, data[i]);
+        htmlString += output;
+    }
+
+    $("#tweets-list").append(htmlString);
+    $('.sidebar').animate({scrollTop: height}, 500);
+
   }
 
   //tokenFreqSuccess(window.cloudData, "#word-cloud-topics");
@@ -54,4 +79,16 @@ $(function() {
     tokenFreqSuccess(data, "#word-cloud-users");
   });
 
+  function pollTweetStream() {
+    $.ajax({
+        url: "/api/timeline",
+        type: "GET",
+        success: renderTweetStream,
+        complete: setTimeout(function(){pollTweetStream()}, 2000)
+      });
+  };
+
+  pollTweetStream();
+
 });
+
