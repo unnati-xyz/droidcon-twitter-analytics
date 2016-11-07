@@ -45,7 +45,9 @@ def get_mention_freq():
 @app.route("/api/timeline")
 def get_timeline():
     try:
-        result = TimeLine().get_recent_timeline()
+        last_timestamp = int(request.args.get('max_time'))
+        print(last_timestamp)
+        result = TimeLine().get_recent_timeline(last_timestamp)
         LOGGER.info(type(result))
         return jsonify(result)
     except Exception:
