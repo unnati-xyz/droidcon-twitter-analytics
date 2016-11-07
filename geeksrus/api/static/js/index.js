@@ -7,7 +7,13 @@ $(function() {
 
     window.prevTimestamp = 9;
 
-    var color = d3.scale.category10();
+    var colorRange = ["#004529", "#006837", "#238443", "#41ab5d", "#78c679", "##addd8e", "#d9f0a3"];
+    var colorRange = ["#fec44f","#fe9929","#ec7014","#cc4c02","#993404","#662506"];
+    colorRange = colorRange.sort(d3.descending);
+    //var color = d3.scale.category10();
+    var color = d3.scale.ordinal().range(colorRange);
+
+
     function tokenFreqSuccess(data, domPlaceHolder, type) {
       $(domPlaceHolder).html("");
       d3.layout.cloud().size([1600, 600])
@@ -23,20 +29,20 @@ $(function() {
       function draw(words) {
           d3.select(domPlaceHolder).append("svg")
                   .attr("width", "100%")
-                  .attr("height", 400)
+                  .attr("height", 300)
                   .attr("class", "wordcloud")
                   .append("g")
                   // without the transform, words words would get cutoff to the left and top, they would
                   // appear outside of the SVG area
-                  .attr("transform", "translate(400,200)")
+                  .attr("transform", "translate(400,150)")
                   .attr("text-anchor", "middle")
                   .selectAll("text")
                   .data(words)
                   .enter().append("text")
-                  .style("font-size", function(d) { return d.size / 2.5+ "px"; })
+                  .style("font-size", function(d) { return d.size / 3.25+ "px"; })
                   .style("fill", function(d, i) { return color(i); })
                   .attr("transform", function(d) {
-                      return "translate(" + [d.x / 2, d.y / 2 ] + ")rotate(" + d.rotate + ")";
+                      return "translate(" + [d.x / 3.5, d.y / 2 ] + ")rotate(" + d.rotate + ")";
                   })
                   .text(function(d) { return d.text; });
       }
@@ -125,7 +131,7 @@ $(function() {
         success: function(data) {
             tokenFreqSuccess(data, "#word-cloud-topics");
         },
-        complete: setTimeout(function(){pollTopTopics()}, 5000)
+        complete: setTimeout(function(){pollTopTopics()}, 10000)
       });
   };
 
@@ -136,7 +142,7 @@ $(function() {
         success: function(data) {
             tokenFreqSuccess(data, "#word-cloud-mentions");
         },
-        complete: setTimeout(function(){pollTopMentions()}, 5000)
+        complete: setTimeout(function(){pollTopMentions()}, 10000)
       });
   };
 
