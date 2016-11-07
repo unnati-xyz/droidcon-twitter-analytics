@@ -32,6 +32,7 @@ class WordCloud:
                 data = re.sub("http\S*\s*", ' ', data)
                 data = re.sub("t.co\S*\s*", ' ', data)
                 data = re.sub("bit.ly\S*\s*", ' ', data)
+                data = re.sub("\W", ' ', data)
                 tokens = nltk.wordpunct_tokenize(data)
                 for token in tokens:
                     token = token.strip()
@@ -61,8 +62,6 @@ class WordCloud:
                     normalized_value = ((max - value)/ (max - min)) * 100.0
                     word_freq['size'] = normalized_value
                     wordcloud.append(word_freq)
-
-            print(wordcloud)
 
 
             # {'text': 'word', 'size' : count}
@@ -95,7 +94,7 @@ class WordCloud:
             count_data = []
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
-                screen_count["text"] = row[1]['screen_name']
+                screen_count["text"] = "@" + row[1]['screen_name']
                 normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
                 screen_count["size"] = normalized_value
                 count_data.append(screen_count)
@@ -103,7 +102,6 @@ class WordCloud:
             mongo_doc = {}
             mongo_doc['word_cloud'] = count_data
             mongo_doc['timestamp'] = datetime.now()
-            print(mongo_doc)
 
             write_mongo(db_conn=dbcon, collection=cfg['mentions_collection'], document=mongo_doc)
 
@@ -129,7 +127,7 @@ class WordCloud:
 
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
-                screen_count["text"] = row[1]['screen_name']
+                screen_count["text"] = "@" + row[1]['screen_name']
                 normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
                 screen_count["size"] = normalized_value
                 count_data.append(screen_count)
