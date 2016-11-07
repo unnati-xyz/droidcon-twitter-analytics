@@ -15,6 +15,7 @@ class TimeLine:
             projection.append('timestamp_ms')
             projection.append('user.screen_name')
             projection.append('user.name')
+            projection.append('user.profile_image_url_https')
             data = find_with_project_and_sort(db_conn=dbcon, collection=cfg['collection'], query=projection, field='timestamp_ms')
             data_df = data.apply(self.generate_columns_from_dict, axis=1)
             maxlen = 10
@@ -26,6 +27,7 @@ class TimeLine:
                 tweet['name'] = row[1]['name']
                 tweet['screen_name'] = row[1]['screen_name']
                 tweet['text'] = row[1]['text']
+                tweet['dp'] = row[1]['dp']
                 timeline.append(tweet)
 
             return timeline
@@ -36,7 +38,7 @@ class TimeLine:
     def generate_columns_from_dict(self, row):
         user_dict = dict(row['user'])
         #return pd.Series({'text': row['text'], 'timestamp': row['timestamp_ms'], 'screen_name': user_dict['screen_name'], 'name': user_dict['name']})
-        return pd.Series({'text': row['text'], 'screen_name': user_dict['screen_name'], 'name': user_dict['name']})
+        return pd.Series({'text': row['text'], 'screen_name': user_dict['screen_name'], 'name': user_dict['name'], 'dp':user_dict['profile_image_url_https']})
 
 if __name__=="__main__":
 
