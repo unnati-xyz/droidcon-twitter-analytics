@@ -9,7 +9,8 @@ $(function() {
 
     var colorRange = ["#004529", "#006837", "#238443", "#41ab5d", "#78c679", "##addd8e", "#d9f0a3"];
     var colorRange = ["#fec44f","#fe9929","#ec7014","#cc4c02","#993404","#662506"];
-    colorRange = colorRange.sort(d3.descending);
+    var colorRange = ["#662506", "#993404", "#cc4c02", "#ec7014", "#fe9929", "#fec44f"];
+   // colorRange = colorRange.sort(d3.descending);
     //var color = d3.scale.category10();
     var color = d3.scale.ordinal().range(colorRange);
 
