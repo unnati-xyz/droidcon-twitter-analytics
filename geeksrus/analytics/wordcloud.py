@@ -1,6 +1,7 @@
 from datetime import datetime
 import traceback
 import re
+from operator import itemgetter
 
 import pandas as pd
 import nltk
@@ -24,7 +25,6 @@ class WordCloud:
     def getTokenFrequency(self, count_cutoff=2, min_length=3):
         try:
             data_df = read_mongo(dbcon, cfg['collection'])
-            print(data_df.head())
             frequency_words_wo_stop = {}
             max = 1
             min = 1
@@ -40,13 +40,10 @@ class WordCloud:
                         if token in frequency_words_wo_stop:
                             count = frequency_words_wo_stop[token]
                             count = count + 1
-
                             if count > max:
                                 max = count
-
                             if count < min:
                                 min = count
-
                             frequency_words_wo_stop[token] = count
                         else:
                             frequency_words_wo_stop[token] = 1
@@ -64,9 +61,12 @@ class WordCloud:
                     wordcloud.append(word_freq)
 
 
+            sorted_wordcloud= sorted(wordcloud, reverse=True, key=itemgetter('size'))
+
+
             # {'text': 'word', 'size' : count}
             mongo_doc = {}
-            mongo_doc['word_cloud'] = wordcloud
+            mongo_doc['word_cloud'] = sorted_wordcloud
             mongo_doc['timestamp'] = datetime.now()
 
             write_mongo(db_conn=dbcon, collection=cfg['word_cloud_collection'], document=mongo_doc)
@@ -79,7 +79,6 @@ class WordCloud:
             projection = []
             projection.append('entities.user_mentions')
             data = read_mongo_projection(dbcon, cfg['collection'], query=projection)
-            data.to_csv('trials.csv')
             normalized_df = pd.io.json.json_normalize(data.entities, 'user_mentions')
 
 
@@ -99,8 +98,9 @@ class WordCloud:
                 screen_count["size"] = normalized_value
                 count_data.append(screen_count)
 
+            sorted_wordcloud= sorted(count_data, reverse=True, key=itemgetter('size'))
             mongo_doc = {}
-            mongo_doc['word_cloud'] = count_data
+            mongo_doc['word_cloud']=sorted_wordcloud
             mongo_doc['timestamp'] = datetime.now()
 
             write_mongo(db_conn=dbcon, collection=cfg['mentions_collection'], document=mongo_doc)
@@ -121,7 +121,6 @@ class WordCloud:
             grouped_df_screen_count = grouped_df_screen_count.ix[:20,]
             count_data = []
 
-
             max = grouped_df_screen_count.id.max()
             min = grouped_df_screen_count.id.min()
 
@@ -132,8 +131,9 @@ class WordCloud:
                 screen_count["size"] = normalized_value
                 count_data.append(screen_count)
 
+            sorted_wordcloud= sorted(count_data, reverse=True, key=itemgetter('size'))
             mongo_doc = {}
-            mongo_doc['word_cloud'] = count_data
+            mongo_doc['word_cloud'] = sorted_wordcloud
             mongo_doc['timestamp'] = datetime.now()
 
             write_mongo(db_conn=dbcon, collection=cfg['users_collection'], document=mongo_doc)
