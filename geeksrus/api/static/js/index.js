@@ -31,7 +31,7 @@ $(function() {
                   .selectAll("text")
                   .data(words)
                   .enter().append("text")
-                  .style("font-size", function(d) { return d.size / 3.5+ "px"; })
+                  .style("font-size", function(d) { return d.size / 2.5+ "px"; })
                   .style("fill", function(d, i) { return color(i); })
                   .attr("transform", function(d) {
                       return "translate(" + [d.x / 2, d.y / 2 ] + ")rotate(" + d.rotate + ")";
@@ -45,6 +45,24 @@ $(function() {
     var htmlString = "";
     var height = $("#tweets-list").height();
 
+    var template = '<div class="row">\
+                <div class="col-md-11 well">\
+                  <div class="row">\
+                    <div class="col-md-3"><img src={{dp}}></div>\
+                    <div class="col-md-9">\
+                      <div class="row">\
+                        <span class="screen-name">{{name}}</span>\
+                      </div>\
+                      <div class="row">\
+                        <span class="handle">@{{screen_name}}</span>\
+                      </div>\
+                    </div>\
+                  </div>\
+                  <div class="row tweet-text">{{text}}</div>\
+                </div>\
+            </div>';
+
+/*
     var template = '<div class="row"> \
       <div class="col-md-11 well"> \
         <div class="row"> \
@@ -60,6 +78,7 @@ $(function() {
         <div class="row tweet-text">{{text}}</div> \
       </div> \
     </div>';
+   */
 
     for(var i=0; i<data.length; i++) {
         var output = Mustache.render(template, data[i]);
@@ -94,7 +113,31 @@ $(function() {
       });
   };
 
+  function pollTopTopics() {
+    $.ajax({
+        url: "/api/cloud/token",
+        type: "GET",
+        success: function(data) {
+            tokenFreqSuccess(data, "#word-cloud-topics");
+        },
+        complete: setTimeout(function(){pollTopTopics()}, 5000)
+      });
+  };
+
+  function pollTopMentions() {
+    $.ajax({
+        url: "/api/cloud/mentions",
+        type: "GET",
+        success: function(data) {
+            tokenFreqSuccess(data, "#word-cloud-mentions");
+        },
+        complete: setTimeout(function(){pollTopMentions()}, 5000)
+      });
+  };
+
   pollTweetStream();
+  pollTopTopics();
+  pollTopMentions();
 
 });
 
