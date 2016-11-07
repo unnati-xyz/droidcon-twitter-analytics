@@ -7,7 +7,7 @@ $(function() {
 
     var color = d3.scale.category10();
     function tokenFreqSuccess(data, domPlaceHolder, type) {
-      $("#word-cloud").html("");
+      $(domPlaceHolder).html("");
       d3.layout.cloud().size([1200, 600])
               .words(data)
               .rotate(0)
@@ -84,7 +84,7 @@ $(function() {
         url: "/api/timeline",
         type: "GET",
         success: renderTweetStream,
-        complete: setTimeout(function(){pollTweetStream()}, 2000)
+        complete: setTimeout(function(){pollTweetStream()}, 5000)
       });
   };
 
