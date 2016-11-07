@@ -17,11 +17,10 @@
 }
 
 .well{
-background: #d3d3d4;
-margin-left: 3%;
-padding: 4% 7%;
-
-
+  background: #d7eac1;
+  margin-left: 3%;
+  padding: 4% 7%;
+  font-family: Raleway;
 }
 
 .card {
@@ -36,7 +35,7 @@ padding: 4% 7%;
   margin-left: 20px;
   background: #ecf0f1;
 
-   border: 1px solid lightgray;
+  border: 1px solid lightgray;
 }
 
 
@@ -59,4 +58,38 @@ padding: 4% 7%;
   height: 550px;
   background: white;
   padding-top: 20px;
+}
+
+.navbar-inverse {
+    background-color: #466d2c;
+    border-color: #dddddd;
+    color: whitesmoke;
+}
+
+.navbar-inverse .navbar-brand {
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: whitesmoke;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.navbar-nav>li>a:hover {
+    border: none;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: whitesmoke;
+}
+
+.navbar-nav>li>a:focus {
+    border: none;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover, .navbar-inverse .navbar-nav>li>a:focus {
+    color: whitesmoke;
+    background-color: transparent;
 }
