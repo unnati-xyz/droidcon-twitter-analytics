@@ -2,13 +2,13 @@
 $(function() {
     console.log( "ready!" );
           $('.carousel').carousel({
-        interval: 2000
+        interval: 10000
       });
 
     var color = d3.scale.category10();
     function tokenFreqSuccess(data, domPlaceHolder, type) {
       $(domPlaceHolder).html("");
-      d3.layout.cloud().size([1200, 600])
+      d3.layout.cloud().size([1600, 600])
               .words(data)
               .rotate(0)
               .fontSize(function(d) { return d.size; })
@@ -21,20 +21,20 @@ $(function() {
       function draw(words) {
           d3.select(domPlaceHolder).append("svg")
                   .attr("width", "100%")
-                  .attr("height", 800)
+                  .attr("height", 400)
                   .attr("class", "wordcloud")
                   .append("g")
                   // without the transform, words words would get cutoff to the left and top, they would
                   // appear outside of the SVG area
-                  .attr("transform", "translate(435,325)")
+                  .attr("transform", "translate(400,200)")
                   .attr("text-anchor", "middle")
                   .selectAll("text")
                   .data(words)
                   .enter().append("text")
-                  .style("font-size", function(d) { return d.size / 1.5+ "px"; })
+                  .style("font-size", function(d) { return d.size / 3.5+ "px"; })
                   .style("fill", function(d, i) { return color(i); })
                   .attr("transform", function(d) {
-                      return "translate(" + [d.x / 1.2, d.y / 1.2 ] + ")rotate(" + d.rotate + ")";
+                      return "translate(" + [d.x / 2, d.y / 2 ] + ")rotate(" + d.rotate + ")";
                   })
                   .text(function(d) { return d.text; });
       }
@@ -46,12 +46,18 @@ $(function() {
     var height = $("#tweets-list").height();
 
     var template = '<div class="row"> \
-      <div class="col-md-10 col-md-offset-1 card"> \
+      <div class="col-md-11 well"> \
         <div class="row"> \
+          <div class="col-md-3"><img src={{dp}}></div>\
+          <div class="col-md-9">\
+          <div class="row">\
           <span class="screen-name">{{name}}</span> \
+          </div>\
+          <div class="row">\
           <span class="handle">@{{screen_name}}</span> \
+          </div>\
         </div> \
-        <div class="row tweet-text">{{text}}}</div> \
+        <div class="row tweet-text">{{text}}</div> \
       </div> \
     </div>';
 
