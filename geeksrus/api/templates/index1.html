@@ -19,7 +19,7 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
-
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -60,7 +60,6 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-4 col-md-4 sidebar">
-          split 1
           <div id="tweets-list">
 
           </div>
@@ -70,13 +69,15 @@
 
           <div class="row">
             <div id="top-topics" class="item active">
-              <div id="word-cloud-topics"></div>
+              <h3>Trending Topics</h3>
+              <div id="word-cloud-topics" class="word-cloud"></div>
             </div>
           </div>
 
           <div class="row">
             <div id="top-mentions" class="item active">
-              <div id="word-cloud-mentions"></div>
+              <h3>Top Mentions</h3>
+              <div id="word-cloud-mentions" class="word-cloud"></div>
             </div>
           </div>
           <!--
