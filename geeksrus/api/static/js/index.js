@@ -5,6 +5,8 @@ $(function() {
         interval: 10000
       });
 
+    window.prevTimestamp = 9;
+
     var color = d3.scale.category10();
     function tokenFreqSuccess(data, domPlaceHolder, type) {
       $(domPlaceHolder).html("");
@@ -106,9 +108,12 @@ $(function() {
 
   function pollTweetStream() {
     $.ajax({
-        url: "/api/timeline",
+        url: "/api/timeline?max_time=" + window.prevTimestamp,
         type: "GET",
-        success: renderTweetStream,
+        success: function(data){
+            window.prevTimestamp = data["max_time"];
+            renderTweetStream(data.tweets);
+        },
         complete: setTimeout(function(){pollTweetStream()}, 5000)
       });
   };
