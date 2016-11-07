@@ -1,14 +1,16 @@
+from datetime import datetime
+import traceback
+import re
+
 import pandas as pd
+import nltk
+from nltk.corpus import stopwords
+
 from geeksrus import LOGGER
 from geeksrus.utils.dbconn import read_mongo, write_mongo, read_mongo_projection, find_and_sort_desc
 from geeksrus import dbcon
 from geeksrus import cfg
 
-import nltk
-from nltk.corpus import stopwords
-from datetime import datetime
-
-import traceback
 
 stop = stopwords.words('english')
 stop.extend(('.', ',', '"', "'", '?', '!', ':', ';',
@@ -24,23 +26,40 @@ class WordCloud:
             data_df = read_mongo(dbcon, cfg['collection'])
             print(data_df.head())
             frequency_words_wo_stop = {}
+            max = 1
+            min = 1
             for data in data_df['text']:
+                data = re.sub("http\S*\s*", ' ', data)
+                data = re.sub("t.co\S*\s*", ' ', data)
+                data = re.sub("bit.ly\S*\s*", ' ', data)
                 tokens = nltk.wordpunct_tokenize(data)
                 for token in tokens:
                     token = token.strip()
-                    if token.lower() not in stop:
+                    if len(token) > 0 and token.lower() not in stop:
                         if token in frequency_words_wo_stop:
                             count = frequency_words_wo_stop[token]
                             count = count + 1
+
+                            if count > max:
+                                max = count
+
+                            if count < min:
+                                min = count
+
                             frequency_words_wo_stop[token] = count
                         else:
                             frequency_words_wo_stop[token] = 1
             wordcloud= []
+
+            if max == min:
+                max = max + 1
+
             for key, value in frequency_words_wo_stop.items():
                 word_freq = {}
                 if value > count_cutoff and len(key) >= min_length:
                     word_freq['text'] = key
-                    word_freq['size'] = value
+                    normalized_value = ((max - value)/ (max - min)) * 100.0
+                    word_freq['size'] = normalized_value
                     wordcloud.append(word_freq)
 
             print(wordcloud)
@@ -63,16 +82,22 @@ class WordCloud:
             data = read_mongo_projection(dbcon, cfg['collection'], query=projection)
             data.to_csv('trials.csv')
             normalized_df = pd.io.json.json_normalize(data.entities, 'user_mentions')
+
+
             grouped_df = normalized_df.groupby(by=['screen_name'], as_index=False)['id'].count()
             grouped_df_screen_count = grouped_df[['screen_name','id']]
             grouped_df_screen_count = grouped_df_screen_count.sort(columns='id', ascending=False).reset_index()
             grouped_df_screen_count = grouped_df_screen_count.ix[:20,]
-            count_data = []
 
+            max = grouped_df_screen_count.id.max()
+            min = grouped_df_screen_count.id.min()
+
+            count_data = []
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
                 screen_count["text"] = row[1]['screen_name']
-                screen_count["size"] = int(row[1]['id'])
+                normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
+                screen_count["size"] = normalized_value
                 count_data.append(screen_count)
 
             mongo_doc = {}
@@ -98,10 +123,15 @@ class WordCloud:
             grouped_df_screen_count = grouped_df_screen_count.ix[:20,]
             count_data = []
 
+
+            max = grouped_df_screen_count.id.max()
+            min = grouped_df_screen_count.id.min()
+
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
                 screen_count["text"] = row[1]['screen_name']
-                screen_count["size"] = int(row[1]['id'])
+                normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
+                screen_count["size"] = normalized_value
                 count_data.append(screen_count)
 
             mongo_doc = {}
