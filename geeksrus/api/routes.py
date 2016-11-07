@@ -54,3 +54,7 @@ def get_timeline():
 @app.route("/")
 def index_page():
     return render_template('index.html')
+
+@app.route("/lol")
+def index1_page():
+    return render_template('index1.html')
