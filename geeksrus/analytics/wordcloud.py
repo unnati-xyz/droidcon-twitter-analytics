@@ -91,13 +91,15 @@ class WordCloud:
             max = grouped_df_screen_count.id.max()
             min = grouped_df_screen_count.id.min()
 
+            exclude_list = ['hasgeek', 'droidconin', 'zainabbawa', 'championswimmer', 'jackerhack', 'sandygrains', 'karthikb351']
             count_data = []
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
-                screen_count["text"] = "@" + row[1]['screen_name']
-                normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
-                screen_count["size"] = normalized_value
-                count_data.append(screen_count)
+                if row[1]['screen_name'] not in exclude_list:
+                    screen_count["text"] = "@" + row[1]['screen_name']
+                    normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
+                    screen_count["size"] = normalized_value
+                    count_data.append(screen_count)
 
             sorted_wordcloud= sorted(count_data, reverse=True, key=itemgetter('size'))
             mongo_doc = {}
