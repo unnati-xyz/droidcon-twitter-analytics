@@ -57,6 +57,7 @@ class WordCloud:
                 if value > count_cutoff and len(key) >= min_length:
                     word_freq['text'] = key
                     normalized_value = ((max - value)/ (max - min)) * 100.0
+                    normalized_value = normalized_value + 1.0
                     word_freq['size'] = normalized_value
                     wordcloud.append(word_freq)
 
