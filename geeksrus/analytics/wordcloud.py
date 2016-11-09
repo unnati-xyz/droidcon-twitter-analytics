@@ -95,7 +95,7 @@ class WordCloud:
             count_data = []
             for row in grouped_df_screen_count.iterrows():
                 screen_count = {}
-                if row[1]['screen_name'] not in exclude_list:
+                if str(row[1]['screen_name']).lower() not in exclude_list:
                     screen_count["text"] = "@" + row[1]['screen_name']
                     normalized_value = ((max - row[1]['id'])/ (max - min)) * 100.0
                     screen_count["size"] = normalized_value
