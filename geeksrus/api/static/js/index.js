@@ -2,7 +2,7 @@
 $(function() {
     console.log( "ready!" );
           $('.carousel').carousel({
-        interval: 10000
+        interval: 20000
       });
 
     window.prevTimestamp = 9;
@@ -17,7 +17,7 @@ $(function() {
 
     function tokenFreqSuccess(data, domPlaceHolder, type) {
       $(domPlaceHolder).html("");
-      d3.layout.cloud().size([1600, 600])
+      d3.layout.cloud().size([1600, 800])
               .words(data)
               .rotate(0)
               .fontSize(function(d) { return d.size; })
@@ -28,14 +28,22 @@ $(function() {
               .start();
 
       function draw(words) {
-          d3.select(domPlaceHolder).append("svg")
-                  .attr("width", "100%")
-                  .attr("height", 300)
+          d3.select(domPlaceHolder)
+                  .append("div")
+                  .classed("svg-container", true) //container class to make it responsive
+                  .append("svg")
+                  //.attr("width", "100%")
+                  //.attr("height", 300)
+                  .attr("preserveAspectRatio", "xMinYMin slice")
+                  .attr("viewBox", "0 0 600 400")
+                  //class to make it responsive
+                  .classed("svg-content-responsive", true)
                   .attr("class", "wordcloud")
                   .append("g")
+                  .attr("class", "wordcloud-g")
                   // without the transform, words words would get cutoff to the left and top, they would
                   // appear outside of the SVG area
-                  .attr("transform", "translate(400,150)")
+                  .attr("transform", "translate(250,200)")
                   .attr("text-anchor", "middle")
                   .selectAll("text")
                   .data(words)
@@ -57,7 +65,7 @@ $(function() {
     var template = '<div class="row">\
                 <div class="col-md-11 well">\
                   <div class="row">\
-                    <div class="col-md-3"><img src={{dp}}></div>\
+                    <div class="col-md-2 dp"><img src={{dp}}></div>\
                     <div class="col-md-9">\
                       <div class="row">\
                         <span class="screen-name">{{name}}</span>\
@@ -94,8 +102,8 @@ $(function() {
         htmlString += output;
     }
 
-    $("#tweets-list").append(htmlString);
-    $('.sidebar').animate({scrollTop: height}, 500);
+    $("#tweets-list").prepend(htmlString);
+    //$('.sidebar').animate({scrollTop: height}, 500);
 
   }
 
@@ -121,7 +129,7 @@ $(function() {
             window.prevTimestamp = data["max_time"];
             renderTweetStream(data.tweets);
         },
-        complete: setTimeout(function(){pollTweetStream()}, 5000)
+        complete: setTimeout(function(){pollTweetStream()}, 10000)
       });
   };
 
