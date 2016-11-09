@@ -111,6 +111,10 @@ g.wordcloud-g {
     padding-left: 0px;
 }
 
+.col-md-2.dp {
+    padding-left: 0px;
+}
+
 .svg-container {
     display: inline-block;
     position: relative;
